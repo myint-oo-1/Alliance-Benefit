@@ -14,7 +14,6 @@ class BenefitChildAddNew extends Component {
                 user_id:'',
                 designation: '',
                 noOfChildren: '',
-                
         
         }
     }
@@ -155,11 +154,23 @@ class BenefitChildAddNew extends Component {
                             </div>
                         </div>
 
-                        <div className="col-12 col-sm-6 col-lg-3 col-xl-3">
-                            <label>Attachment</label>
-                            <input className="full_width" type="file" id="attach_file" multiple onChange={this.checkFiles.bind(this)}></input>
-                        </div>
 
+                        <div className="form-group col-md-6">
+                            <div>
+                                <label htmlFor="attachment" className="col-sm-12 custom-file-label">Provide At Least One Or At Most Two
+                                    Attachment</label>
+                            </div>
+
+                            <div className="col-sm-10">
+
+                                <CustomFileInput
+                                    btnName="Upload"
+                                    onChange={this.checkFiles.bind(this)}
+                                    id="attach_file"
+                                />
+                            </div>
+
+                        </div>
 
                     </form>
 
