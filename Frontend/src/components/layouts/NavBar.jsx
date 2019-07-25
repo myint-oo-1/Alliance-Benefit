@@ -11,11 +11,12 @@ class NavBar extends Component {
                         <div className="navbar-header">
                             <a href="#" className="navbar-minimalize minimalize-styl-2 btn btn-primary" ><i className="fa fa-bars"></i> </a>
                         </div>
+
                         <ul className="nav navbar-top-links navbar-right">
                             <li>
                                 <a href="login.html">
                                     <i className="fa fa-sign-out"></i> Log out
-                    </a>
+                                </a>
                             </li>
                         </ul>
                     </nav>

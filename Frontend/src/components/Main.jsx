@@ -12,6 +12,10 @@ import SalaryAdvanceApprovalForm from './Allowance/SalaryAdvance/SalaryAdvanceAp
 import WeddingBenefitMain from './Benefits/Wedding/WeddingBenefitMain';
 import ChildBenefit from './Benefits/Child/ChildBenefitMain';
 import FuneralBenefitMain from './Benefits/Funeral/FuneralBenefitMain';
+import ExternalTrainingBenefitMain from './Benefits/ExternalTraining/ExternalTrainingBenefitMain';
+import MedicalBenefitMain from './Benefits/MedicalBenefit/MedicalBenefitMain';
+import BirthdayFundMain from './Benefits/BirthdayFund/BirthdayFundMain';
+import OtherBenefitMain from './Benefits/OtherBenefit/OtherBenefitMain';
 
 const Main = () => (
     <Switch>
@@ -27,6 +31,10 @@ const Main = () => (
         <Route path="/wedding_benefit" component={WeddingBenefitMain}></Route>
         <Route path="/child_benefit" component={ChildBenefit}></Route>
         <Route path="/funeral_benefit" component={FuneralBenefitMain}></Route>
+        <Route path="/external_training_benefit" component={ExternalTrainingBenefitMain}></Route>
+        <Route path="/medical_benefit" component={MedicalBenefitMain}></Route>
+        <Route path="/birthday_fund" component={BirthdayFundMain}></Route>
+        <Route path="/other_benefit" component={OtherBenefitMain}></Route>
 
     </Switch>
 );

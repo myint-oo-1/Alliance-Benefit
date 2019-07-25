@@ -1,0 +1,339 @@
+import React, {Component} from 'react';
+import Select from 'react-select';
+import CustomFileInput from '../CustomFileInput';
+import '../../Benefits/Benefits.css';
+import { ToastContainer, toast } from 'react-toastify';
+import {main_url} from "../../../utils/CommonFunction";
+
+const beneficiary = [
+    {value: 0, label: 'Employee'},
+    {value: 1, label: 'Parent'},
+    {value: 1, label: 'Spouse'},
+    {value: 1, label: 'Children'}
+];
+
+class BenefitMedicalAddNew extends Component {
+    constructor() {
+        super();
+        this.state = {
+
+            employeeName: [],
+            user_id:'',
+
+            availableAmount: '',
+            beneficiary: '',
+            beneficiaryName: '',
+            description: '',
+            amount: '',
+            attachment: ''
+        }
+    }
+
+    componentDidMount() {
+        fetch(`${main_url}benefit/getEmployeeList`)
+            .then(res => { if (res.ok) return res.json() })
+            .then(list => {
+                this.setState({
+                    employeeNameList: list
+                })
+            })
+    }
+
+    handleEmployeeName = (event) => {
+        this.setState({
+            user_id: event.value
+        });
+    };
+
+
+    handleAvailableAmount = (event) => {
+        this.setState({
+            availableAmount:event.target.value
+        });
+    };
+
+    handleBeneficiary = (event) => {
+        this.setState({
+            beneficiary: event.label
+        });
+    };
+
+    handleBeneficiaryName = (event) => {
+        this.setState({
+            beneficiaryName: event.target.value
+        });
+    };
+
+    handleDescription = (event) => {
+        this.setState({
+            description: event.target.value
+        });
+    };
+
+    handleAmount = (event) => {
+        this.setState({
+            amount: event.target.value
+        });
+    };
+
+    // handleAttachment = (event) => {
+    //     let data = this.state.funeralBenefitsData;
+    //     data.attachment = event.target.value;
+    //     this.setState({
+    //         funeralBenefitsData: data
+    //     });
+    // };
+
+    // save = () => {
+    //     let data = this.state.dataSource;
+    //     data.push(this.state.funeralBenefitsData);
+
+    //     this.setState({
+    //         dataSource: data,
+
+    //         funeralBenefitsData: {
+    //             employeeName: '',
+    //             designation: '',
+    //             spouseName: '',
+    //             attachment: '',
+    //         },
+
+    //         selectedSpouseCompany: ''
+
+    //     });
+
+    // };
+
+    checkFiles(e) {
+        var files = e.target.files;
+        var attachment = [];
+        if (files.length > 5) {
+            toast.warning('You can only upload a maximum of 5 files!')
+        }
+        else {
+            for (let i = 0; i < files.length; i++) {
+                attachment.push(files[i])
+            }
+        }
+        this.setState({
+            attachment: attachment
+        })
+    }
+
+    // handleRemove = (event) => {
+    //     let data = this.state.dataSource;
+    //     data.splice(event, 1);
+    //     this.setState({
+    //         dataSource: data
+    //     });
+    // };
+
+    save() {
+        var data = {
+            user_id:this.state.user_id,
+            funeral_type:this.state.deadPerson,
+            head_no:this.state.headNo
+        };
+
+        const formdata = new FormData();
+
+        var obj = document.querySelector("#attach_file").files.length;
+        for (var i = 0; i < obj; i++) {
+            var imagedata = document.querySelector("#attach_file").files[i];
+            formdata.append('uploadfile', imagedata);
+        }
+
+        formdata.append('funeral_benefit', JSON.stringify(data))
+        alert(JSON.stringify(data,2,undefined))
+
+        let status = 0;
+        fetch(`${main_url}funeral_benefit/saveFuneralBenefit`, {
+            method: "POST",
+            body: formdata
+        })
+            .then(res => {
+                status = res.status;
+                return res.text()
+            })
+            .then(text => {
+                if (status === 200) toast.success(text);
+
+                else toast.error(text);
+
+
+            })
+    }
+
+
+    render() {
+        return (
+            <div className="benefits benefit-medical">
+                <div className='row'>
+                    <form className="form-group">
+                        <div className="col-md-12">
+                            <div><label htmlFor="employee-name" className="col-sm-12">Employee Name</label></div>
+                            <div className="col-sm-11">
+                                <Select
+                                    options={this.state.employeeName}
+                                    placeholder="Please Choose The Employee Name"
+                                    onChange={this.handleEmployeeName}
+                                    value={this.state.employeeName}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="col-md-6">
+                            <div><label htmlFor="training-type" className="col-sm-12">Please Enter The Available Amount ? </label></div>
+                            <div className="col-sm-10">
+                                <input type="number"
+                                       className="form-control"
+                                       placeholder="What is the available amount"
+                                       onChange={this.handleAvailableAmount}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="col-md-6">
+                            <div><label htmlFor="available-amount" className="col-sm-12">Please Choose The Beneficiary </label></div>
+                            <div className="col-sm-10">
+                                <Select
+                                    options={beneficiary}
+                                    placeholder="Choose Your Beneficiary"
+                                    onChange={this.handleBeneficiary}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="col-md-6">
+                            <div><label htmlFor="name-of-beneficiary" className="col-sm-12">Please Enter The Name of Beneficiary </label></div>
+                            <div className="col-sm-10">
+                                <input type="text"
+                                       className="form-control"
+                                       placeholder="Provide The Name Of Beneficiary"
+                                       onChange={this.handleBeneficiaryName}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="col-md-6">
+                            <div><label htmlFor="description" className="col-sm-12">Please Enter The Description </label></div>
+                            <div className="col-sm-10">
+                                <textarea
+                                    name="description"
+                                    className="form-control"
+                                    cols="20"
+                                    rows="10"
+                                    id="description"
+                                    placeholder="Provice The Description"
+                                    onChange={this.handleDescription}
+                                >
+
+                                </textarea>
+                            </div>
+                        </div>
+
+                        <div className="col-md-6">
+                            <div><label htmlFor="amount" className="col-sm-12">Please Enter The Amount </label></div>
+                            <div className="col-sm-10">
+                                <input type="number"
+                                   className="form-control"
+                                   placeholder="Enter The Amount"
+                                   onChange={this.handleAmount}
+                                />
+                            </div>
+                        </div>
+
+                        {/*<div className="form-group col-12 col-sm-6 col-lg-3 col-xl-3">*/}
+                        {/*    <label className='col-sm-12'>Attachment</label>*/}
+                        {/*    /!*<input className="full_width col-sm-10" type="file" id="attach_file" multiple onChange={this.checkFiles.bind(this)}></input>*!/*/}
+                        {/*    <div className="col-sm-12">*/}
+                        {/*        <CustomFileInput*/}
+                        {/*            className="form-control"*/}
+                        {/*        />*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
+
+                        <div className="form-group col-md-6">
+                            <div>
+                                <label htmlFor="attachment" className="col-sm-12 custom-file-label">Provide At Least One Or At Most Two
+                                Attachment</label>
+                            </div>
+
+                            <div className="col-sm-10">
+
+                                <CustomFileInput
+                                    btnName="Upload"
+                                    onChange={this.checkFiles.bind(this)}
+                                    id="attach_file"
+                                />
+                            </div>
+
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+                <div className="row save-btn">
+                    <div className="float-right">
+                        <div>
+                            <button className="btn btn-info" type="button" onClick={this.save.bind(this)}>Save</button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr/>
+
+                {/* <div className="row">
+                    <div className="result-area col-md-12">
+                        <table className="table table-bordered table-responsive">
+                            <thead>
+                            <tr>
+                                <th>Employee Name</th>
+                                <th>Designation</th>
+                                <th>Dead Person</th>
+                                <th>Head Number</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+
+
+                            <tbody>
+
+                            {
+                                (this.state.dataSource.length <= 0) ?
+                                    ( <tr><td colSpan="8" className="text-center font-weight-bold text-white bg-danger">
+                                        No Data To Show
+                                    </td></tr> ) :
+                                    (this.state.dataSource.map((item, index) => {
+                                            return(
+                                                <tr key={index}>
+                                                    <td>{item.employeeName}</td>
+                                                    <td>{item.designation}</td>
+                                                    <td>{item.deadPerson}</td>
+                                                    <td>{item.headNo}</td>
+                                                    <td>
+                                                        <button className="btn btn-danger" onClick={this.handleRemove.bind(this, index)}>Remove</button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
+
+                                    )
+                            }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                 */}
+
+            </div>
+        )
+    }
+}
+
+export default BenefitMedicalAddNew;

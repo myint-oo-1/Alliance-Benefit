@@ -55,6 +55,10 @@ export default class Sidebar extends Component {
                                     <li className="active"><a href="/wedding_benefit"><i className="fas fa-ring"></i>Wedding Benefits</a></li>
                                     <li className="active"><a href="/child_benefit"><i className="fas fa-baby"></i>Child Benefit</a></li>
                                     <li className="active"><a href="/funeral_benefit"><i className="fas fa-cross"></i>Funeral Benefit</a></li>
+                                    <li className="active"><a href="/external_training_benefit"><i className="fas fa-chalkboard-teacher"></i>External Training</a></li>
+                                    <li className="active"><a href="/medical_benefit"><i className="fas fa-laptop-medical"></i>Medical Benefit</a></li>
+                                    <li className="active"><a href="/birthday_fund"><i className="fas fa-birthday-cake"></i>Birthday Fund</a></li>
+                                    <li className="active"><a href="/other_benefit"><i className="fas fa-ellipsis-h"></i>Other Benefit</a></li>
                                 </ul>
                             </li>
 

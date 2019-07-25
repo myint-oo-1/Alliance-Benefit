@@ -50,6 +50,12 @@ const placeHolder = {
 	lineHeight: '1.428'
 };
 
+const noOfFiles = {
+	padding: '3px',
+    borderRadius: '2px',
+    textAlign: 'center'
+};
+
 class CustomFileInput extends Component {
 	constructor(props) {
 		super(props);
@@ -92,6 +98,12 @@ class CustomFileInput extends Component {
 
 	}
 
+	handleChange(event) {
+		let noOfFiles = event.target.files.length;
+		document.querySelector('.noOfFiles .number').innerHTML = noOfFiles;
+		this.props.onChange(event);
+	}
+
 	render() {
 		return(
 			<div style = {customFile} className="customFile">
@@ -103,14 +115,20 @@ class CustomFileInput extends Component {
 							(this.props.value) ? this.props.value : 'Choose Files'
 						}
 					</span>
+
+
 					<input
 						type="file"
 						style = {customFileInput}
 						className="customFileInput"
-						onChange={this.props.onChange}
+                        multiple
+						onChange={this.handleChange.bind(this)}
+						id={this.props.id ? this.props.id : ''}
 					/>
+
 				</div>
-		
+                <div className="noOfFiles bg-info" style={noOfFiles}><span className="number"> 0 </span> Files Selected</div>
+
 			</div>
 		);
 	}
