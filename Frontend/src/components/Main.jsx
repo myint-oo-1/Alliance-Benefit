@@ -16,6 +16,7 @@ import ExternalTrainingBenefitMain from './Benefits/ExternalTraining/ExternalTra
 import MedicalBenefitMain from './Benefits/MedicalBenefit/MedicalBenefitMain';
 import BirthdayFundMain from './Benefits/BirthdayFund/BirthdayFundMain';
 import OtherBenefitMain from './Benefits/OtherBenefit/OtherBenefitMain';
+import TeamBuilding from './Benefits/TeamBuilding/TeamBuildingMain';
 
 const Main = () => (
     <Switch>
@@ -35,6 +36,7 @@ const Main = () => (
         <Route path="/medical_benefit" component={MedicalBenefitMain}></Route>
         <Route path="/birthday_fund" component={BirthdayFundMain}></Route>
         <Route path="/other_benefit" component={OtherBenefitMain}></Route>
+        <Route path="/team_building" component={TeamBuilding}></Route>
 
     </Switch>
 );
