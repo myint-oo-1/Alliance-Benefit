@@ -95,13 +95,11 @@ export default class TeamBuildingTable extends Component {
                 if (result.status === 0 || result.status === 4) {
                     obj = {
                         no: i + 1,
-                        form_no: data[i].form_no,
-                        employee_name: data[i].employee_name,
-                        designation: data[i].designation,
-                        deadPerson: data[i].deadPerson,
-                        headNo: data[i].headNo,
-                        attachment: data[i].attachment,
-                        status: status,
+                        requestByBranch: data[i].request_by_branch,
+                        quarter: data[i].quarter,
+                        employeeName: data[i].fullname,
+                        amount: data[i].amount,
+                        totalAmount: data[i].total_amount,
                         action:
                             '<button style="margin-right:10px" class="btn btn-primary btn-sm own-btn-edit" id="toView" ><span id="view" class="hidden" >' + JSON.stringify(result) + '</span>  <i className="fa fa-cogs"></i>&nbsp;View</button>' +
                             '<button style="margin-right:10px" class="btn btn-primary btn-sm own-btn-edit" id="toEdit" ><span id="edit" class="hidden" >' + JSON.stringify(result) + '</span>  <i className="fa fa-cogs"></i>&nbsp;Edit</button>'
@@ -111,13 +109,11 @@ export default class TeamBuildingTable extends Component {
                 else {
                     obj = {
                         no: i + 1,
-                        form_no: data[i].form_no,
-                        employee_name: data[i].employee_name,
-                        designation: data[i].designation,
-                        deadPerson: data[i].deadPerson,
-                        headNo: data[i].headNo,
-                        attachment: data[i].attachment,
-                        status: status,
+                        requestByBranch: data[i].request_by_branch,
+                        quarter: data[i].quarter,
+                        employeeName: data[i].fullname,
+                        amount: data[i].amount,
+                        totalAmount: data[i].total_amount,
                         action:
                             '<button style="margin-right:10px" class="btn btn-primary btn-sm own-btn-edit" id="toView" ><span id="view" class="hidden" >' + JSON.stringify(result) + '</span>  <i className="fa fa-cogs"></i>&nbsp;View</button>'
 
@@ -151,12 +147,11 @@ export default class TeamBuildingTable extends Component {
                 data: l,
                 columns: [
                     { title: "No", data: "no" },
+                    { title: "Request By Branch", data: "requestByBranch" },
+                    { title: "Quarter", data: "quarter" },
                     { title: "Employee Name", data: "employeeName" },
-                    { title: "Designation", data: "designation" },
-                    { title: "Dead Person", data: "deadPerson" },
-                    { title: "Head Number", data: "headNo" },
-                    { title: "Attachment", data: "attachment" },
-                    { title: "Status", data: "status" },
+                    { title: "Amount", data: "amount" },
+                    { title: "Total Amount", data: "totalAmount"},
                     { title: "Action", data: "action" }
                 ],
             });
@@ -177,12 +172,11 @@ export default class TeamBuildingTable extends Component {
                 data: l,
 
                 columns: [
+                    { title: "Request By Branch", data: "requestByBranch" },
+                    { title: "Quarter", data: "quarter" },
                     { title: "Employee Name", data: "employeeName" },
-                    { title: "Designation", data: "designation" },
-                    { title: "Dead Person", data: "deadPerson" },
-                    { title: "Head Number", data: "headNo" },
-                    { title: "Attachment", data: "attachment" },
-                    { title: "Status", data: "status" },
+                    { title: "Amount", data: "amount" },
+                    { title: "Total Amount", data: "totalAmount"},
                     { title: "Action", data: "action" }
                 ],
 

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Select from 'react-select';
-import CustomFileInput from '../CustomFileInput';
 import '../../Benefits/Benefits.css';
 import { ToastContainer, toast } from 'react-toastify';
 import {main_url} from "../../../utils/CommonFunction";
@@ -17,14 +16,23 @@ class TeamBuildingAddNew extends Component {
         super();
         this.state = {
             requestByBranchNames: [],
-            requestByBranchName: '',
             quarter: [],
-            employeeName: [],
-            user_id:'',
-            amount: '',
-            total_amount: '',
+            employeeNameList: [],
+
+            teamBuildingDataSet : {
+                requestByBranchName: '',
+                selectedRequestByBranchName: '',
+                quarterType: '',
+                selectedQuarter: '',
+                employeeName: '',
+                selectedEmployeeName: '',
+                user_id: '',
+                amount: ''
+            },
+
+            total_amount: 0,
             
-            dataSource: [],
+            dataSource: []
         }
     }
 
@@ -38,48 +46,98 @@ class TeamBuildingAddNew extends Component {
             })
     }
 
-    handleEmployeeName = (event) => {
-      
+    handleRequestByBranch = (event) => {
+        let data = this.state.teamBuildingDataSet;
+        data.requestByBranchName = event.target.value;
+
         this.setState({
-            user_id: event.value
+            teamBuildingDataSet: data
         });
     };
 
-    handleRequestByBranch = (event) => {
+    handleEmployeeName = (event) => {
 
+        let data = this.state.teamBuildingDataSet;
+        data.employeeName = event.target.value;
+        data.selectedEmployeeName = event;
+
+        this.setState({
+            teamBuildingDataSet: data
+        });
     };
 
     handleQuarter = (event) => {
+        let data = this.state.teamBuildingDataSet;
+        data.quarterType = event.label;
+        data.selectedQuarter = event;
 
+        this.setState({
+            teamBuildingDataSet: data,
+        });
     };
 
+    handleAmount = (event) => {
+        let data = this.state.teamBuildingDataSet;
+        data.amount = event.target.value;
+
+        this.setState({
+            teamBuildingDataSet: data
+        });
+    };
 
     save = () => {
         let data = this.state.dataSource;
-        data.push(this.state.funeralBenefitsData);
+        let totalAmount = 0;
+
+        data.push(this.state.teamBuildingDataSet);
 
         this.setState({
             dataSource: data,
 
-            funeralBenefitsData: {
+            teamBuildingDataSet: {
+                requestByBranchName: '',
+                quarterType: '',
+                selectedQuarter: '',
                 employeeName: '',
-                designation: '',
-                spouseName: '',
-                attachment: '',
-            },
-
-            selectedSpouseCompany: ''
+                user_id: '',
+                amount: ''
+            }
 
         });
+
+        this.state.dataSource.map(item => totalAmount += parseInt(item.amount));
+        this.state.total_amount = totalAmount;
+
+        this.toggleTotalRow();
 
     };
 
     handleRemove = (event) => {
         let data = this.state.dataSource;
-        data.splice(event, 1);
+
+        let deletedData = data.splice(event, 1);
+        let newTotalAmount = parseInt(this.state.total_amount) - deletedData[0].amount;
+
         this.setState({
-            dataSource: data
+            dataSource: data,
+            total_amount: newTotalAmount
         });
+
+        this.toggleTotalRow();
+    };
+
+    /*
+    *
+    *
+    * Toggle The Total Field
+    *
+    * Show When There is Data and Hide When There is No Data
+    *
+    */
+    toggleTotalRow = () => {
+        (this.state.dataSource.length > 0) ?
+            (document.querySelector('.total-amount').classList.remove('sr-only'))
+            : (document.querySelector('.total-amount').classList.add('sr-only'))
     };
 
 
@@ -91,11 +149,18 @@ class TeamBuildingAddNew extends Component {
                         <div className="col-md-6">
                             <div><label htmlFor="request-by-branch" className="col-sm-12">Request By Branch</label></div>
                             <div className="col-sm-11">
-                                <Select
-                                    options={this.state.requestByBranchNames}
-                                    placeholder="Please Choose The Appropriate One"
-                                    onChange={this.handleRequestByBranch}
-                                    value={this.state.requestByBranchName}
+                                {/*<Select*/}
+                                {/*    options={this.state.requestByBranchNames}*/}
+                                {/*    placeholder="Please Choose The Appropriate One"*/}
+                                {/*    onChange={this.handleRequestByBranch}*/}
+                                {/*    value={this.state.requestByBranchName}*/}
+                                {/*/>*/}
+
+                                <input type="text"
+                                       placeholder="Please Provide Request By Branch Name"
+                                       onChange={this.handleRequestByBranch}
+                                       value={this.state.teamBuildingDataSet.requestByBranchName}
+                                       className="form-control"
                                 />
                             </div>
                         </div>
@@ -107,33 +172,33 @@ class TeamBuildingAddNew extends Component {
                                     options={quarterOptions}
                                     placeholder="Please Choose The Desired Quarter Range"
                                     onChange={this.handleQuarter}
-                                    value={this.state.selectedQuarter}
+                                    value={this.state.teamBuildingDataSet.selectedQuarter}
                                 />
                             </div>
                         </div>
 
-                        <div className="col-md-6">
+                        <div className="col-md-6" style={{marginTop: '20px'}}>
                             <div><label htmlFor="employee-name" className="col-sm-12">Employee Name</label></div>
                             <div className="col-sm-11">
                                 <Select
-                                    options={this.state.employeeName}
+                                    options={this.state.employeeNameList}
                                     placeholder="Please Choose The Employee Name"
                                     onChange={this.handleEmployeeName}
-                                    value={this.state.employeeName}
+                                    value={this.state.teamBuildingDataSet.selectedEmployeeName}
                                 />
                             </div>
                         </div>
 
 
-                        <div className="col-md-6">
+                        <div className="col-md-6" style={{marginTop: '20px'}}>
                             <div><label htmlFor="amount" className="col-sm-12">Amount</label></div>
-                            <div className="col-sm-10">
+                            <div className="col-sm-11">
                                 <input
                                     type="number"
                                     placeholder="Please Provide The Amount"
                                     className="form-control"
                                     onChange={this.handleAmount}
-                                    value={this.state.amount}
+                                    value={this.state.teamBuildingDataSet.amount}
                                 />
                             </div>
                         </div>
@@ -143,8 +208,8 @@ class TeamBuildingAddNew extends Component {
 
                 </div>
 
-                <div className="row save-btn">
-                    <div className="float-right">
+                <div className="row save-btn" style={{marginTop: '10px'}}>
+                    <div className="float-right" style={{marginRight: '-30px'}}>
                         <div>
                             <button className="btn btn-info" type="button" onClick={this.save.bind(this)}>Save</button>
                         </div>
@@ -158,38 +223,47 @@ class TeamBuildingAddNew extends Component {
                     <div className="result-area col-md-12">
                         <table className="table table-bordered table-responsive">
                             <thead>
-                            <tr>
-                                <th>Employee Name</th>
-                                <th>Designation</th>
-                                <th>Dead Person</th>
-                                <th>Head Number</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th>Request By Branch</th>
+                                    <th>Quarter</th>
+                                    <th>Employee Name</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
 
                             <tbody>
+                                {
+                                    (this.state.dataSource.length <= 0) ?
+                                        ( <tr>
+                                            <td colSpan="8" className="text-center font-weight-bold text-white bg-danger">
+                                            No Data To Show
+                                            </td>
+                                        </tr> ) :
+                                        (
+                                            this.state.dataSource.map((item, index) => {
+                                                return(
+                                                    <tr key={index}>
+                                                        <td>{item.requestByBranchName}</td>
+                                                        <td>{item.quarterType}</td>
+                                                        <td>{item.employeeName}</td>
+                                                        <td>{item.amount}</td>
+                                                        <td>
+                                                            <button className="btn btn-danger" onClick={this.handleRemove.bind(this, index)}>Remove</button>
+                                                        </td>
+                                                    </tr>
+                                                );
 
-                            {
-                                (this.state.dataSource.length <= 0) ?
-                                    ( <tr><td colSpan="8" className="text-center font-weight-bold text-white bg-danger">
-                                        No Data To Show
-                                    </td></tr> ) :
-                                    (this.state.dataSource.map((item, index) => {
-                                            return(
-                                                <tr key={index}>
-                                                    <td>{item.employeeName}</td>
-                                                    <td>{item.designation}</td>
-                                                    <td>{item.deadPerson}</td>
-                                                    <td>{item.headNo}</td>
-                                                    <td>
-                                                        <button className="btn btn-danger" onClick={this.handleRemove.bind(this, index)}>Remove</button>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })
+                                            })
 
-                                    )
-                            }
+
+                                        )
+                                }
+
+                                <tr className="sr-only total-amount">
+                                    <th colSpan="4">Total</th>
+                                    <td>{this.state.total_amount}</td>
+                                </tr>
                             </tbody>
 
                         </table>
